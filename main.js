@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import Expo, { Gyroscope } from "expo";
+import { Button, StyleSheet, Text, View } from "react-native";
+import Expo, { Gyroscope, Constants, WebBrowser, Components, KeepAwake } from "expo";
 
 class App extends React.Component {
   state = {
@@ -12,36 +12,25 @@ class App extends React.Component {
   }
 
   subscribeGyroscope = () => {
-    this.subscription = Gyroscope.addListener(result => {
-      this.setState({ gyroscopeData: result });
+    Gyroscope.setUpdateInterval(1500);
+    this.subscription = Gyroscope.addListener(gyroscopeData => {
+      this.setState({ gyroscopeData });
     });
   };
 
   render() {
     let { x, y, z } = this.state.gyroscopeData;
 
-    if (round(x) > 90) {
-      alert("X more than 90");
-    }
-
     return (
       <View style={styles.container}>
-        <Text>Open up main.js to start working on your app!</Text>
-        <Text>Gyroscope:</Text>
-        <Text>x: {round(x)} y: {round(y)} z: {round(z)}</Text>
+        <Text>Gyroscope</Text>
+        <Text>x: {x}</Text>
+        <Text>y: {y}</Text>
+        <Text>z: {z}</Text>
+        <KeepAwake />
       </View>
     );
   }
-}
-
-function round(n) {
-  if (!n) {
-    return 0;
-  }
-  let radians = Math.floor(n * 100) / 100;
-  let degrees = radians * (180 / Math.PI);
-
-  return degrees;
 }
 
 const styles = StyleSheet.create({
